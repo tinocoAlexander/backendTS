@@ -1,19 +1,24 @@
-import { Document, model, Schema, Types } from "mongoose";
-
-export interface IRole extends Document {
-    roleId: string;
-    type: string;
+export interface IUser extends Document {
+    nombre: string;
+    email: string;
+    password: string;
+    roles: string[]; // 🔄 Cambiado
+    _id: Types.ObjectId;
+    phone: string;
     createDate: Date;
     deleteDate: Date;
     status: boolean;
 }
 
-const roleSchema = new Schema<IRole>({
-    roleId: { type: String, required: true, unique: true },
-    type: { type: String, required: true, enum: ["user", "admin"] },
+const userSchema = new Schema<IUser>({
+    nombre: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    roles: [{ type: String, enum: ["user", "admin"], required: true }], // 🔄 Cambiado
+    phone: { type: String },
     createDate: { type: Date, default: Date.now },
     deleteDate: { type: Date, default: Date.now },
     status: { type: Boolean, default: true }
 });
 
-export const Role = model<IRole>("Role", roleSchema, 'roles');
+export const User = model<IUser>("User", userSchema, 'users');
