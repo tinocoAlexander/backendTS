@@ -1,33 +1,34 @@
-import React from "react";
 import UserForm from "./modules/user/userForm";
+import Orders from "./modules/orders/Orders";
+import Products from "./modules/products/Products";
 
 export interface AppRoute {
   path: string;
   element: JSX.Element;
   label?: string;
   icon?: string;
-  roleIds?: string[]; // si quieres filtrar por rol
+  roleIds?: string[];
   hidden?: boolean;
 }
 
 const routes: AppRoute[] = [
   {
-    path: '/',
+    path: 'users',
     element: <UserForm />,
-    label: 'Inicio',
-    icon: 'HomeOutlined',
-  },
-  {
-    path: '/users',
-    element: <UserForm />,
-    label: 'Usuarios',
+    label: 'Users',
     icon: 'UserOutlined',
   },
   {
-    path: '/dashboard',
-    element: <UserForm />,
-    label: 'Usuarios',
-    icon: 'UserOutlined',
+    path: 'orders',
+    element: <Orders />,
+    label: 'Orders',
+    icon: 'BarChartOutlined',
+  },
+  {
+    path: 'products',
+    element: <Products />,
+    label: 'Products',
+    icon: 'DashboardOutlined',
   },
 ];
 

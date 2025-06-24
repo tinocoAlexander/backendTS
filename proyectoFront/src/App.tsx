@@ -1,26 +1,38 @@
-import './App.css';
-import UserForm from './modules/user/UserForm';
-import { BrowserRouter as Router, Routes, Route, Link, BrowserRouter } from 'react-router-dom';
-import MenuComponent from './modules/menu/MenuComponent';
-import Dashboard from './modules/dashboard/Dashboard';
-import routes from './core/menuRoutes';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Dashboard from "./modules/dashboard/Dashboard";
+import routes from "./MenuRoutes";
+import AuthRoutes from "./auth/AuthRoutes";
+import Login from "./modules/login/Login";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  const handleClick = () => {
-    setCount((count) => count + 1);
-  };
-
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        {routes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login/>} />
+
+          <Route
+            path="/"
+            element={
+              <AuthRoutes>
+                <Dashboard />
+              </AuthRoutes>
+            }
+          >
+            <Route index element={<Dashboard />} />
+
+            {routes.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.element}
+              />
+            ))}
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

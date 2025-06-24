@@ -3,10 +3,13 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import UserForm from './modules/user/userForm'
+import { AuthProvider } from './auth/AuthContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
-    <UserForm />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+    
   </StrictMode>,
 )
