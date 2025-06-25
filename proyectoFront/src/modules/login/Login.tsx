@@ -1,11 +1,34 @@
 import { Form, Input, Button, Checkbox, Card } from 'antd';
+import { useAuth } from '../../auth/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
     const [form] = Form.useForm();
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
-    const onFinish = (values: any) => {
-        console.log('Login values:', values);
+    const handlerSubmit = async (values: any) => {
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values)
+            });
+
+            if (!response.ok) {
+                throw new Error('Error en la autenticación');
+            }
+
+            const data = await response.json();
+            login(data.accessToken);
+            navigate('/')
+            form.resetFields();
+        } catch (error) {
+            console.error(error);
+        }
     };
+
+    const onFinish = handlerSubmit;
 
     return (
         <Card
@@ -20,7 +43,7 @@ function LoginForm() {
             >
                 <Form.Item
                     label="Correo electrónico"
-                    name="email"
+                    name="username"
                     rules={[
                         { required: true, message: 'Por favor ingresa tu correo electrónico' },
                         { type: 'email', message: 'El correo no es válido' }
@@ -42,7 +65,7 @@ function LoginForm() {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" block>
+                    <Button type="primary" htmlType="submit" block onClick={handlerSubmit}>
                         Ingresar
                     </Button>
                 </Form.Item>
