@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { login, getTimeToken, updateToken, getAllUsers, saveUser, updateUser, deleteUser } from '../controllers/auth.controller';
 import { createOrder, getAllOrders, markOrderAsPaid, deleteOrder } from '../controllers/order.controller';
 import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct } from '../controllers/product.controller';
+import { getMenuByRoles, createMenu } from '../controllers/menu.controller';
 
 const router = Router();
 
@@ -26,5 +27,9 @@ router.get('/products', getAllProducts);
 router.get('/product/:id', getProductById);
 router.patch('/update-product/:id', updateProduct);
 router.delete('/delete-product/:id', deleteProduct);
+
+// Menu
+router.get('/menu', getMenuByRoles);
+router.post('/create-menu', createMenu);
 
 export default router;

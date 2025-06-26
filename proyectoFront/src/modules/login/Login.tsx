@@ -21,7 +21,7 @@ function LoginForm() {
 
             const data = await response.json();
             login(data.accessToken);
-            navigate('/')
+            navigate('/dashboard/users')
             form.resetFields();
         } catch (error) {
             console.error(error);

@@ -10,18 +10,16 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login/>} />
+          <Route path="/login" element={<Login />} />
 
           <Route
-            path="/"
+            path="/dashboard"
             element={
               <AuthRoutes>
                 <Dashboard />
               </AuthRoutes>
             }
           >
-            <Route index element={<Dashboard />} />
-
             {routes.map((route) => (
               <Route
                 key={route.path}
