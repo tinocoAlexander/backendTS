@@ -20,7 +20,7 @@ function LoginForm() {
             }
 
             const data = await response.json();
-            login(data.accessToken);
+            login(data.accessToken, data.user);
             navigate('/dashboard/users')
             form.resetFields();
         } catch (error) {

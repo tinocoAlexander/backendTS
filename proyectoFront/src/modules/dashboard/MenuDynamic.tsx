@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DashboardOutlined, UserOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
-import routes from '../../MenuRoutes';
+import { useAuth } from '../../auth/AuthContext';
 
 const Icons: any = {
     DashboardOutlined: <DashboardOutlined />,
@@ -13,12 +13,34 @@ const Icons: any = {
 const MenuDynamic = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { user, token } = useAuth();
+    const [menuItems, setMenuItems] = useState<any[]>([]);
 
-    const menuItems = routes.map((route) => ({
-        key: `/dashboard/${route.path}`,
-        icon: route.icon ? Icons[route.icon] : null,
-        label: route.label,
-        onClick: () => navigate(`/dashboard/${route.path}`),
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!user || !user.roles) return;
+            // Convierte los roles a string separados por coma
+            const rolesParam = user.roles.map((r: any) => typeof r === 'string' ? r : r._id).join(',');
+            try {
+                const response = await fetch(`http://localhost:3000/api/auth/menu?roles=${rolesParam}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                const menuList = await response.json();
+                setMenuItems(menuList);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchData();
+    }, [user, token]);
+
+    // Renderiza el menú dinámicamente según la respuesta del backend
+    const items = menuItems.map((item) => ({
+        key: item.path,
+        icon: item.icon && Icons[item.icon] ? Icons[item.icon] : null,
+        label: item.title,
+        onClick: () => navigate(item.path),
     }));
 
     return (
@@ -26,7 +48,7 @@ const MenuDynamic = () => {
             theme='dark'
             mode='inline'
             selectedKeys={[location.pathname]}
-            items={menuItems}
+            items={items}
             style={{ height: '100%', borderRight: 0 }}
         />
     );
